@@ -14,7 +14,7 @@ Group:          Networking/Other
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:        wxWindows Library License v3.1
 
-BuildRequires: cmake gcc-c++ glibc-devel libjpeg-static-devel X11-devel turbojpeg-devel
+BuildRequires: cmake gcc-c++ glibc-devel jpeg-devel X11-devel turbojpeg-devel
 
 %description
 VirtualGL is a library which allows most Linux OpenGL applications to be
