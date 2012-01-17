@@ -14,7 +14,7 @@ Group:          Networking/Other
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:        wxWindows Library License v3.1
 
-BuildRequires: cmake gcc-c++ glibc-devel libjpeg-static-devel X11-devel
+BuildRequires: cmake gcc-c++ glibc-devel libjpeg-static-devel X11-devel turbojpeg-devel
 
 %description
 VirtualGL is a library which allows most Linux OpenGL applications to be
@@ -74,7 +74,9 @@ cmake -G "Unix Makefiles" -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} -DCMAKE_INSTALL
 %install
 rm -rf %{buildroot}
 %makeinstall
+%ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
+%endif
 rm -rf %{buildroot}/%{_libdir}/fakelib
 rm -rf %{buildroot}/%{_prefix}/fakelib
 mkdir -p %{buildroot}/%{_libdir}/fakelib
