@@ -1,6 +1,7 @@
 %define name    VirtualGL
 %define version 2.3
-%define release 1
+%define release 2
+%define libpackage %mklibname %{name}
 
 Name:           %{name}
 Summary:        A toolkit for displaying OpenGL applications to thin clients
@@ -15,6 +16,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:        wxWindows Library License v3.1
 
 BuildRequires: cmake gcc-c++ glibc-devel jpeg-devel X11-devel turbojpeg-devel
+Requires: %{develpackage} = %{version}
 
 %description
 VirtualGL is a library which allows most Linux OpenGL applications to be
@@ -61,6 +63,11 @@ Visualization" (Stegmaier, Magallon, Ertl 2002) and "A Framework for
 Interactive Hardware Accelerated Remote 3D-Visualization" (Engel, Sommer,
 Ertl 2000.)
 
+%package -n %libpackage
+Summary: Libraries injected by VirtualGL into applications that are ran through it.
+Group: System/Libraries
+
+
 %prep
 %setup -q
 %patch0 -p1
@@ -95,8 +102,11 @@ ldconfig
 %files
 %defattr(-,root,root)
 %doc /usr/doc/*
-%dir %{_libdir}/fakelib
 %{_bindir}/*
+
+%files -n %libpackage
+%defattr(-,root,root)
+%dir %{_libdir}/fakelib
 %{_libdir}/fakelib/libGL.so
 %{_libdir}/librrfaker.so
 %{_libdir}/libdlfaker.so
@@ -106,4 +116,3 @@ ldconfig
 %defattr(-,root,root)
 %{_includedir}/rrtransport.h
 %{_includedir}/rr.h
-
