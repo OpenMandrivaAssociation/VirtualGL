@@ -1,6 +1,6 @@
 %define name    VirtualGL
 %define version 2.3
-%define release 2
+%define release 3
 %define libpackage %mklibname %{name}
 
 Name:           %{name}
@@ -18,7 +18,7 @@ License:        wxWindows Library License v3.1
 BuildRequires: cmake gcc-c++ glibc-devel jpeg-devel X11-devel turbojpeg-devel
 Requires: %libpackage = %{version}
 %ifarch x86_64
-Requires: lib%{name} = %{version}
+Suggests: lib%{name} = %{version}
 %endif
 
 %description
