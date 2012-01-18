@@ -67,6 +67,9 @@ Ertl 2000.)
 Summary: Libraries injected by VirtualGL into applications that are ran through it.
 Group: System/Libraries
 
+%description %libpackage
+Libraries injected by VirtualGL into applications that are ran throught it. 
+Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
 %setup -q
