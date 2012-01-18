@@ -16,7 +16,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:        wxWindows Library License v3.1
 
 BuildRequires: cmake gcc-c++ glibc-devel jpeg-devel X11-devel turbojpeg-devel
-Requires: %{name}-devel = %{version}
+Requires: %libpackage = %{version}
+%ifarch x86_64
+Requires: lib%{name} = %{version}
+%endif
 
 %description
 VirtualGL is a library which allows most Linux OpenGL applications to be
@@ -64,7 +67,7 @@ Interactive Hardware Accelerated Remote 3D-Visualization" (Engel, Sommer,
 Ertl 2000.)
 
 %package -n %libpackage
-Summary: Libraries injected by VirtualGL into applications that are ran through it.
+Summary: Libraries injected by VirtualGL into applications that are ran through it
 Group: System/Libraries
 
 %description -n %libpackage
