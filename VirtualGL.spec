@@ -1,25 +1,22 @@
-%define name    VirtualGL
-%define version 2.3
-%define release 3
 %define libpackage %mklibname %{name}
 
-Name:           %{name}
-Summary:        A toolkit for displaying OpenGL applications to thin clients
-Version:        %{version}
-Release:        %{release}
-Source0:        http://prdownloads.sourceforge.net/virtualgl/%{name}-%{version}.tar.gz
-Patch0:         vgl_2.3_patch0
-URL:            http://www.virtualgl.org
-
-Group:          Networking/Other
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-License:        wxWindows Library License v3.1
-
-BuildRequires: cmake gcc-c++ glibc-devel jpeg-devel X11-devel turbojpeg-devel
-Requires: %libpackage = %{version}
-%ifarch x86_64
-Suggests: lib%{name} = %{version}
-%endif
+Name:		VirtualGL
+Summary:	A toolkit for displaying OpenGL applications to thin clients
+Version:	2.3.1
+Release:	1
+Group:		Networking/Other
+License:	wxWindows Library License v3.1
+URL:		http://www.virtualgl.org
+Source0:	http://prdownloads.sourceforge.net/virtualgl/%{name}-%{version}.tar.gz
+BuildRequires:	cmake
+BuildRequires:	gcc-c++
+BuildRequires:	glibc-devel
+BuildRequires:	jpeg-static-devel
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xext)
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glu)
+Requires:	%{libpackage} = %{version}
 
 %description
 VirtualGL is a library which allows most Linux OpenGL applications to be
@@ -42,9 +39,9 @@ Interactive Hardware Accelerated Remote 3D-Visualization" (Engel, Sommer,
 Ertl 2000.)
 
 %package devel
-Summary: A toolkit for displaying OpenGL applications to thin clients
-Group: Networking/Other
-Requires: %{name} = %{version}
+Summary:	A toolkit for displaying OpenGL applications to thin clients
+Group:		Networking/Other
+Requires:	%{name} = %{version}
 
 %description devel
 VirtualGL is a library which allows most Linux OpenGL applications to be
@@ -66,52 +63,40 @@ Visualization" (Stegmaier, Magallon, Ertl 2002) and "A Framework for
 Interactive Hardware Accelerated Remote 3D-Visualization" (Engel, Sommer,
 Ertl 2000.)
 
-%package -n %libpackage
-Summary: Libraries injected by VirtualGL into applications that are ran through it
-Group: System/Libraries
+%package -n %{libpackage}
+Summary:	Libraries injected by VirtualGL into applications that are ran through it
+Group:		System/Libraries
 
-%description -n %libpackage
+%description -n %{libpackage}
 Libraries injected by VirtualGL into applications that are ran throught it. 
 Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 cmake -G "Unix Makefiles" -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} -DCMAKE_INSTALL_PREFIX=%{buildroot}/%{_prefix} -DTJPEG_INCLUDE_DIR=%{_includedir} -DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
 %make
 
-#make
-
 %install
 rm -rf %{buildroot}
 %makeinstall
+
 %ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
 %endif
-rm -rf %{buildroot}/%{_libdir}/fakelib
-rm -rf %{buildroot}/%{_prefix}/fakelib
-mkdir -p %{buildroot}/%{_libdir}/fakelib
-ln -sf ../librrfaker.so %{buildroot}/%{_libdir}/fakelib/libGL.so
-mv -f %{buildroot}/%{_bindir}/glxinfo %{buildroot}/%{_bindir}/glxinfo2
 
-%clean
-rm -rf %{buildroot}
-
-%post
-ldconfig
-
-%postun
-ldconfig
+rm -rf %{buildroot}%{_libdir}/fakelib
+rm -rf %{buildroot}%{_prefix}/fakelib
+mkdir -p %{buildroot}%{_libdir}/fakelib
+ln -sf ../librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
+mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 
 %files
-%defattr(-,root,root)
 %doc /usr/doc/*
 %{_bindir}/*
 
-%files -n %libpackage
-%defattr(-,root,root)
+%files -n %{libpackage}
 %dir %{_libdir}/fakelib
 %{_libdir}/fakelib/libGL.so
 %{_libdir}/librrfaker.so
@@ -119,6 +104,26 @@ ldconfig
 %{_libdir}/libgefaker.so
 
 %files devel
-%defattr(-,root,root)
 %{_includedir}/rrtransport.h
 %{_includedir}/rr.h
+
+
+%changelog
+* Wed Jan 18 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-3
++ Revision: 762216
+- Change hard requires 32bit libs to x86_64 to Suggests
+
+* Wed Jan 18 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-2
++ Revision: 762152
+- fix requires. Drop devel, add libpackage. For x86_64 we still need 32 package together with x86_64
+- Split package into a new lib package, to allow installing 32 and 64 bits libraries at the same time.
+- %changelog
+
+* Tue Jan 17 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-1
++ Revision: 761936
+- imported package VirtualGL
+- imported package VirtualGL
+
+
+* Mon Jan 16 2012 Jaron Viëtor <jaron@vietors.com> 2.3-1mdk
+- Initial package
