@@ -102,6 +102,10 @@ mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 
 %files -n %{libpackage}
 %dir %{_libdir}/fakelib
+%ifarch x86_64
+%dir /usr/fakelib64
+/usr/fakelib64/libGL.so
+%endif
 %{_libdir}/fakelib/libGL.so
 %{_libdir}/librrfaker.so
 %{_libdir}/libdlfaker.so
