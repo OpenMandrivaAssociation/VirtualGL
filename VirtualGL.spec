@@ -77,7 +77,7 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 %build
 cmake -G "Unix Makefiles" \
 	-DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} \
-	-DCMAKE_INSTALL_PREFIX=%{buildroot}/%{_prefix} \
+	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
 	-DVGL_DOCDIR=%{_defaultdocdir}/%{name} \
 	-DVGL_LIBDIR=%{_libdir} \
 	-DTJPEG_INCLUDE_DIR=%{_includedir} \
