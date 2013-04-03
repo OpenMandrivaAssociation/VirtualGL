@@ -81,6 +81,7 @@ cmake -G "Unix Makefiles" \
 	-DVGL_DOCDIR=%{_defaultdocdir}/%{name} \
 	-DVGL_LIBDIR=%{_libdir} \
 	-DTJPEG_INCLUDE_DIR=%{_includedir} \
+	-DVGL_BUILDSTATIC=0 \
 	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
 %make
 
