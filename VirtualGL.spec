@@ -75,7 +75,13 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 %setup -q
 
 %build
-cmake -G "Unix Makefiles" -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} -DCMAKE_INSTALL_PREFIX=%{buildroot}/%{_prefix} -DTJPEG_INCLUDE_DIR=%{_includedir} -DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
+cmake -G "Unix Makefiles" \
+	-DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} \
+	-DCMAKE_INSTALL_PREFIX=%{buildroot}/%{_prefix} \
+	-DVGL_DOCDIR=%{_defaultdocdir}/%{name} \
+	-DVGL_LIBDIR=%{_libdir} \
+	-DTJPEG_INCLUDE_DIR=%{_includedir} \
+	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
 %make
 
 %install
