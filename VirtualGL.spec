@@ -1,4 +1,5 @@
 %define libpackage %mklibname %{name}
+%define debug_package %{nil}
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
