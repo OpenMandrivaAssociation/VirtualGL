@@ -96,7 +96,7 @@ ln -sf ../librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
 mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 
 %files
-%doc /usr/doc/*
+%{_docdir}/%{name}
 %{_bindir}/*
 
 %files -n %{libpackage}
