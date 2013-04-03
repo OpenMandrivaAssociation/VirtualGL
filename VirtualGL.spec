@@ -87,11 +87,7 @@ cmake -G "Unix Makefiles" \
 
 %install
 rm -rf %{buildroot}
-%makeinstall
-
-%ifarch x86_64
-mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
-%endif
+%makeinstall_std
 
 rm -rf %{buildroot}%{_libdir}/fakelib
 rm -rf %{buildroot}%{_prefix}/fakelib
