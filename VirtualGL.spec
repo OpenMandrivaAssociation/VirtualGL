@@ -83,11 +83,11 @@ cmake -G "Unix Makefiles" \
 	-DVGL_LIBDIR=%{_libdir} \
 	-DTJPEG_INCLUDE_DIR=%{_includedir} \
 	-DVGL_BUILDSTATIC=0 \
+	-DVGL_FAKELIBDIR=%{_libdir}/fakelib/ \
 	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 rm -rf %{buildroot}%{_libdir}/fakelib
@@ -114,24 +114,3 @@ mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 %files devel
 %{_includedir}/rrtransport.h
 %{_includedir}/rr.h
-
-
-%changelog
-* Wed Jan 18 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-3
-+ Revision: 762216
-- Change hard requires 32bit libs to x86_64 to Suggests
-
-* Wed Jan 18 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-2
-+ Revision: 762152
-- fix requires. Drop devel, add libpackage. For x86_64 we still need 32 package together with x86_64
-- Split package into a new lib package, to allow installing 32 and 64 bits libraries at the same time.
-- %changelog
-
-* Tue Jan 17 2012 Александр Казанцев <kazancas@mandriva.org> 2.3-1
-+ Revision: 761936
-- imported package VirtualGL
-- imported package VirtualGL
-
-
-* Mon Jan 16 2012 Jaron Viëtor <jaron@vietors.com> 2.3-1mdk
-- Initial package
