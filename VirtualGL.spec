@@ -101,7 +101,7 @@ mkdir -p %{buildroot}%{_libdir}/fakelib
 ln -sf ../librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
 mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 
-%ifarch x86_64
+%ifarch x86_64 aarch64
 mv %{buildroot}%{_bindir}/.vglrun.vars64 %{buildroot}%{_bindir}/vglrun.vars64
 %else
 mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_bindir}/vglrun.vars32
