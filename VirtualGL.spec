@@ -3,12 +3,14 @@
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	2.3.2
-Release:	7
+Version:	2.3.90
+Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
 Source0:	http://prdownloads.sourceforge.net/virtualgl/%{name}-%{version}.tar.gz
+Patch0:		VirtualGL-redhatlibexecpathsfix.patch
+Patch1:		VirtualGL-redhatpathsfix.patch
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	glibc-devel
@@ -74,8 +76,11 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
 %setup -q
+%apply_patches
 
 %build
+export CC=gcc
+export CXX=g++
 cmake -G "Unix Makefiles" \
 	-DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} \
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
@@ -96,16 +101,19 @@ mkdir -p %{buildroot}%{_libdir}/fakelib
 ln -sf ../librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
 mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
 
+%ifarch x86_64
+mv %{buildroot}%{_bindir}/.vglrun.vars64 %{buildroot}%{_bindir}/vglrun.vars64
+%else
+mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_bindir}/vglrun.vars32
+%endif
+
+
 %files
 %{_docdir}/%{name}
 %{_bindir}/*
 
 %files -n %{libpackage}
 %dir %{_libdir}/fakelib
-%ifarch x86_64
-%dir /usr/fakelib64
-/usr/fakelib64/libGL.so
-%endif
 %{_libdir}/fakelib/libGL.so
 %{_libdir}/librrfaker.so
 %{_libdir}/libdlfaker.so
