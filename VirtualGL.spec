@@ -3,13 +3,12 @@
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	2.3.90
-Release:	4
+Version:	2.4.1
+Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
 Source0:	http://prdownloads.sourceforge.net/virtualgl/%{name}-%{version}.tar.gz
-Patch0:		VirtualGL-redhatlibexecpathsfix.patch
 Patch1:		VirtualGL-redhatpathsfix.patch
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
@@ -89,7 +88,7 @@ cmake -G "Unix Makefiles" \
 	-DTJPEG_INCLUDE_DIR=%{_includedir} \
 	-DVGL_BUILDSTATIC=0 \
 	-DVGL_FAKELIBDIR=%{_libdir}/fakelib/ \
-	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.a .
+	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.so .
 %make
 
 %install
