@@ -24,6 +24,7 @@ BuildRequires:	jpeg-static-devel
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xext)
+BuildRequires:	pkgconfig(xtst)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pkgconfig(glu)
