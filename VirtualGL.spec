@@ -17,12 +17,14 @@ Patch2:         %{name}-redhatpathsfix.patch
 # fix for bz1088475
 Patch3:         %{name}-redhatlibexecpathsfix.patch
 BuildRequires:	cmake
-BuildRequires:	gcc-c++
 BuildRequires:	glibc-devel
 BuildRequires:	fltk-devel
+BuildRequires:	fltk-fluid
 BuildRequires:	jpeg-static-devel
 BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xext)
+BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pkgconfig(glu)
 Requires:	%{libpackage} = %{version}
