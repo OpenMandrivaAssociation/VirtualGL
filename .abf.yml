@@ -1,4 +1,2 @@
-removed_sources:
-  VirtualGL-2.3.90.tar.gz: 8dea9be78760a9f0018c06df9b9e6f98d75ca85d
 sources:
-  VirtualGL-2.4.1.tar.gz: 4be0689a667c9b9fe59575d81a003324e9dfc20a
+  2.6.tar.gz: 4fad860affc565c7e5a6387bc496cdfaae196b3e

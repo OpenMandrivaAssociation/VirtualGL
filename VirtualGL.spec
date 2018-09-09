@@ -1,18 +1,25 @@
 %define libpackage %mklibname %{name}
 %define debug_package %{nil}
+%define Werror_cflags %nil
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	2.4.1
+Version:	2.6
 Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
-Source0:	http://prdownloads.sourceforge.net/virtualgl/%{name}-%{version}.tar.gz
-Patch1:		VirtualGL-redhatpathsfix.patch
+Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}.tar.gz
+# Use system glx.h
+Patch1:         %{name}-glx.patch
+# fix for bz923961
+Patch2:         %{name}-redhatpathsfix.patch
+# fix for bz1088475
+Patch3:         %{name}-redhatlibexecpathsfix.patch
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	glibc-devel
+BuildRequires:	fltk-devel
 BuildRequires:	jpeg-static-devel
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xext)
@@ -74,31 +81,43 @@ Libraries injected by VirtualGL into applications that are ran throught it.
 Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
-%setup -q
+%setup -qn virtualgl-%{version}
 %apply_patches
+sed -i -e 's,"glx.h",<GL/glx.h>,' server/*.[hc]*
+# Remove bundled libraries
+rm -r common/glx* server/fltk
+rm doc/LICENSE-*.txt
+
+# Use /var/lib, bug #428122
+sed -e "s#/etc/opt#/var/lib#g" -i doc/unixconfig.txt doc/index.html doc/advancedopengl.txt \
+	server/vglrun.in server/vglgenkey server/vglserver_config
+
 
 %build
-export CC=gcc
-export CXX=g++
+#export LDFLAGS="%{ldflags} -Wl,--no-as-needed"
+
 cmake -G "Unix Makefiles" \
-	-DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} \
-	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
-	-DVGL_DOCDIR=%{_defaultdocdir}/%{name} \
-	-DVGL_LIBDIR=%{_libdir} \
-	-DTJPEG_INCLUDE_DIR=%{_includedir} \
-	-DVGL_BUILDSTATIC=0 \
-	-DVGL_FAKELIBDIR=%{_libdir}/fakelib/ \
-	-DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.so .
+         -DVGL_SYSTEMFLTK=1 \
+         -DVGL_SYSTEMGLX=1 \
+         -DVGL_FAKEXCB=1 \
+         -DVGL_USESSL=0 \
+         -DVGL_BUILDSTATIC=0 \
+         -DTJPEG_INCLUDE_DIR=%{_includedir}/ \
+         -DTJPEG_LIBRARY=%{_libdir}/libturbojpeg.so \
+         -DCMAKE_INSTALL_PREFIX=%{_prefix}/ \
+         -DCMAKE_INSTALL_LIBDIR=%{_libdir}/VirtualGL/ \
+         -DCMAKE_INSTALL_DOCDIR=%{_docdir}/%{name}/ \
+         -DCMAKE_INSTALL_BINDIR=%{_bindir}/ .
 %make
 
 %install
 %makeinstall_std
 
-rm -rf %{buildroot}%{_libdir}/fakelib
-rm -rf %{buildroot}%{_prefix}/fakelib
-mkdir -p %{buildroot}%{_libdir}/fakelib
-ln -sf ../librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
-mv -f %{buildroot}%{_bindir}/glxinfo %{buildroot}%{_bindir}/glxinfo2
+# glxinfo conflicts with command from glx-utils so lets do what Arch does
+# and rename the command
+mv $RPM_BUILD_ROOT/%{_bindir}/glxinfo $RPM_BUILD_ROOT/%{_bindir}/vglxinfo
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/fakelib/
+ln -sf %{_libdir}/VirtualGL/librrfaker.so $RPM_BUILD_ROOT%{_libdir}/fakelib/libGL.so
 
 %ifarch x86_64 aarch64
 mv %{buildroot}%{_bindir}/.vglrun.vars64 %{buildroot}%{_bindir}/vglrun.vars64
@@ -112,11 +131,11 @@ mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_bindir}/vglrun.vars32
 %{_bindir}/*
 
 %files -n %{libpackage}
-%dir %{_libdir}/fakelib
 %{_libdir}/fakelib/libGL.so
-%{_libdir}/librrfaker.so
-%{_libdir}/libdlfaker.so
-%{_libdir}/libgefaker.so
+%{_libdir}/VirtualGL/libdlfaker.so
+%{_libdir}/VirtualGL/libvglfaker-nodl.so
+%{_libdir}/VirtualGL/libvglfaker.so
+%{_libdir}/VirtualGL/libgefaker.so
 
 %files devel
 %{_includedir}/rrtransport.h
