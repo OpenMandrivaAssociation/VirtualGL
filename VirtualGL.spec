@@ -4,18 +4,18 @@
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	2.6
-Release:	2
+Version:	2.6.2
+Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
 Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}.tar.gz
 # Use system glx.h
-Patch1:         %{name}-glx.patch
+Patch0:         %{name}-glx.patch
 # fix for bz923961
-Patch2:         %{name}-redhatpathsfix.patch
+Patch1:         %{name}-redhatpathsfix.patch
 # fix for bz1088475
-Patch3:         %{name}-redhatlibexecpathsfix.patch
+Patch2:         %{name}-redhatlibexecpathsfix.patch
 BuildRequires:	cmake
 BuildRequires:	glibc-devel
 BuildRequires:	fltk-devel
@@ -87,6 +87,7 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 %setup -qn virtualgl-%{version}
 %apply_patches
 sed -i -e 's,"glx.h",<GL/glx.h>,' server/*.[hc]*
+sed -i -e 's,"glxext.h",<GL/glxext.h>,' server/*.[hc]*
 # Remove bundled libraries
 rm -r common/glx* server/fltk
 rm doc/LICENSE-*.txt
