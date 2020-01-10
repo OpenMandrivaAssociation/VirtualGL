@@ -85,7 +85,7 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
 %setup -qn virtualgl-%{version}
-%apply_patches
+%autopatch -p1
 sed -i -e 's,"glx.h",<GL/glx.h>,' server/*.[hc]*
 sed -i -e 's,"glxext.h",<GL/glxext.h>,' server/*.[hc]*
 # Remove bundled libraries
