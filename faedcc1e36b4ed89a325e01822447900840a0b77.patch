@@ -1,0 +1,85 @@
+diff --git a/ChangeLog.md b/ChangeLog.md
+index 3c3804e..76eec62 100644
+--- a/ChangeLog.md
++++ b/ChangeLog.md
+@@ -40,6 +40,8 @@ features are, for the most part, EOL.
+ 
+ 6. `vglserver_config` now works properly with FreeBSD systems running GDM v3.
+ 
++2. VirtualGL can now be built using the GLX headers from Mesa 19.3.0 and later.
++
+ 
+ 2.6.2
+ =====
+diff --git a/server/faker-glx.cpp b/server/faker-glx.cpp
+index d2b80c9..84846dc 100644
+--- a/server/faker-glx.cpp
++++ b/server/faker-glx.cpp
+@@ -1,6 +1,6 @@
+ // Copyright (C)2004 Landmark Graphics Corporation
+ // Copyright (C)2005, 2006 Sun Microsystems, Inc.
+-// Copyright (C)2009, 2011-2019 D. R. Commander
++// Copyright (C)2009, 2011-2020 D. R. Commander
+ //
+ // This library is free software and may be redistributed and/or modified under
+ // the terms of the wxWindows Library License, Version 3.1 or (at your option)
+@@ -2192,11 +2192,18 @@ void glXQueryDrawable(Display *dpy, GLXDrawable draw, int attribute,
+ 	CATCH();
+ }
+ 
++#if defined(GLX_GLXEXT_VERSION) && GLX_GLXEXT_VERSION >= 20190000
++void glXQueryGLXPbufferSGIX(Display *dpy, GLXPbuffer pbuf, int attribute,
++	unsigned int *value)
++#else
+ int glXQueryGLXPbufferSGIX(Display *dpy, GLXPbuffer pbuf, int attribute,
+ 	unsigned int *value)
++#endif
+ {
+ 	glXQueryDrawable(dpy, pbuf, attribute, value);
++	#if !defined(GLX_GLXEXT_VERSION) || GLX_GLXEXT_VERSION < 20190000
+ 	return 0;
++	#endif
+ }
+ 
+ 
+@@ -2358,8 +2365,13 @@ void glXSwapBuffers(Display *dpy, GLXDrawable drawable)
+ 
+ // Returns the transparent index from the overlay visual on the 2D X server
+ 
++#if defined(GLX_GLXEXT_VERSION) && GLX_GLXEXT_VERSION >= 20190000
++int glXGetTransparentIndexSUN(Display *dpy, Window overlay, Window underlay,
++	unsigned long *transparentIndex)
++#else
+ int glXGetTransparentIndexSUN(Display *dpy, Window overlay, Window underlay,
+ 	long *transparentIndex)
++#endif
+ {
+ 	int retval = False;
+ 	XWindowAttributes xwa;
+diff --git a/server/faker-sym.h b/server/faker-sym.h
+index 2dab2fb..8ae431b 100644
+--- a/server/faker-sym.h
++++ b/server/faker-sym.h
+@@ -1,6 +1,6 @@
+ // Copyright (C)2004 Landmark Graphics Corporation
+ // Copyright (C)2005, 2006 Sun Microsystems, Inc.
+-// Copyright (C)2009, 2011, 2013-2016, 2018-2019 D. R. Commander
++// Copyright (C)2009, 2011, 2013-2016, 2018-2020 D. R. Commander
+ //
+ // This library is free software and may be redistributed and/or modified under
+ // the terms of the wxWindows Library License, Version 3.1 or (at your option)
+@@ -535,8 +535,14 @@ FUNCDEF2(GLXFBConfigSGIX, glXGetFBConfigFromVisualSGIX, Display *, dpy,
+ 
+ // GLX_SUN_get_transparent_index
+ 
++#if defined(GLX_GLXEXT_VERSION) && GLX_GLXEXT_VERSION >= 20190000
++FUNCDEF4(int, glXGetTransparentIndexSUN, Display *, dpy, Window, overlay,
++	Window, underlay, unsigned long *, transparentIndex,
++	glXGetTransparentIndexSUN)
++#else
+ FUNCDEF4(int, glXGetTransparentIndexSUN, Display *, dpy, Window, overlay,
+ 	Window, underlay, long *, transparentIndex, glXGetTransparentIndexSUN);
++#endif
+ 
+ 
+ // GL functions

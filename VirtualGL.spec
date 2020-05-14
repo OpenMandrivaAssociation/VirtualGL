@@ -4,14 +4,14 @@
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	2.6.2
+Version:	2.6.3
 Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
 Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}.tar.gz
 # Use system glx.h
-Patch0:         %{name}-glx.patch
+Patch0:         faedcc1e36b4ed89a325e01822447900840a0b77.patch
 # fix for bz923961
 Patch1:         %{name}-redhatpathsfix.patch
 # fix for bz1088475
@@ -21,6 +21,7 @@ BuildRequires:	glibc-devel
 BuildRequires:	fltk-devel
 BuildRequires:	fltk-fluid
 BuildRequires:	jpeg-static-devel
+BuildRequires:	opencl-devel
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xext)
@@ -88,8 +89,6 @@ Lib package allow installing 32 and 64 bits libraries at the same time.
 %autopatch -p1
 sed -i -e 's,"glx.h",<GL/glx.h>,' server/*.[hc]*
 sed -i -e 's,"glxext.h",<GL/glxext.h>,' server/*.[hc]*
-# Remove bundled libraries
-rm -r common/glx* server/fltk
 rm doc/LICENSE-*.txt
 
 # Use /var/lib, bug #428122
@@ -112,10 +111,11 @@ cmake -G "Unix Makefiles" \
          -DCMAKE_INSTALL_LIBDIR=%{_libdir}/VirtualGL/ \
          -DCMAKE_INSTALL_DOCDIR=%{_docdir}/%{name}/ \
          -DCMAKE_INSTALL_BINDIR=%{_bindir}/ .
-%make
+
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 # glxinfo conflicts with command from glx-utils so lets do what Arch does
 # and rename the command
@@ -123,7 +123,7 @@ mv $RPM_BUILD_ROOT/%{_bindir}/glxinfo $RPM_BUILD_ROOT/%{_bindir}/vglxinfo
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/fakelib/
 ln -sf %{_libdir}/VirtualGL/librrfaker.so $RPM_BUILD_ROOT%{_libdir}/fakelib/libGL.so
 
-%ifarch x86_64 aarch64 znver1
+%ifarch %{x86_64} aarch64 znver1
 mv %{buildroot}%{_bindir}/.vglrun.vars64 %{buildroot}%{_bindir}/vglrun.vars64
 %else
 mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_bindir}/vglrun.vars32
@@ -140,6 +140,7 @@ mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_bindir}/vglrun.vars32
 %{_libdir}/VirtualGL/libvglfaker-nodl.so
 %{_libdir}/VirtualGL/libvglfaker.so
 %{_libdir}/VirtualGL/libgefaker.so
+%{_libdir}/VirtualGL/libvglfaker-opencl.so
 
 %files devel
 %{_includedir}/rrtransport.h
