@@ -1,6 +1,7 @@
 %define libpackage %mklibname %{name}
 %define debug_package %{nil}
 %define Werror_cflags %nil
+%define tarname	virtualgl
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
@@ -9,7 +10,7 @@ Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
-Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}/%{tarname}-%{version}.tar.gz
 # Use system glx.h
 Patch0:         faedcc1e36b4ed89a325e01822447900840a0b77.patch
 # fix for bz923961
