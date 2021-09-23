@@ -1,5 +1,7 @@
+# Work around incomplete debug packages
+%global _empty_manifest_terminate_build 0
+
 %define libpackage %mklibname %{name}
-%define debug_package %{nil}
 %define Werror_cflags %nil
 %define tarname	virtualgl
 
