@@ -1,6 +1,9 @@
 # Work around incomplete debug packages
 %global _empty_manifest_terminate_build 0
 
+# Fix build with LLD 17
+%global build_ldflags %{build_ldflags} -Wl,--undefined-version
+
 %define libpackage %mklibname %{name}
 %define Werror_cflags %nil
 %define tarname	virtualgl
