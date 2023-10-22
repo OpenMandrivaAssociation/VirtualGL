@@ -2,7 +2,7 @@
 %global _empty_manifest_terminate_build 0
 
 # Fix build with LLD 17
-%global build_ldflags %{build_ldflags} -Wl,--undefined-version
+#%global build_ldflags %{build_ldflags} -Wl,--undefined-version
 
 %define libpackage %mklibname %{name}
 %define Werror_cflags %nil
@@ -105,7 +105,8 @@ sed -e "s#/etc/opt#/var/lib#g" -i doc/unixconfig.txt doc/index.html doc/advanced
 
 %build
 #export LDFLAGS="%{ldflags} -Wl,--no-as-needed"
-
+export CC=gcc
+export CXX=g++
 cmake -G "Unix Makefiles" \
          -DVGL_SYSTEMFLTK=1 \
          -DVGL_SYSTEMGLX=1 \
