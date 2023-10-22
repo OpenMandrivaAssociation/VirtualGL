@@ -28,6 +28,7 @@ BuildRequires:	fltk-devel
 BuildRequires:	fltk-fluid
 BuildRequires:	jpeg-static-devel
 BuildRequires:	opencl-devel
+BuildRequires:	opencl-headers
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xext)
