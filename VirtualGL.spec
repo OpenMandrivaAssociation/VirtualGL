@@ -10,12 +10,12 @@
 
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
-Version:	3.1
+Version:	3.1.1
 Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		http://www.virtualgl.org
-Source0:	https://github.com/VirtualGL/virtualgl/archive/%{version}/%{tarname}-%{version}.tar.gz
+Source0:	https://github.com/VirtualGL/virtualgl/releases/download/%{version}/VirtualGL-%{version}.tar.gz
 # Use system glx.h
 #Patch0:         faedcc1e36b4ed89a325e01822447900840a0b77.patch
 # fix for bz923961
@@ -92,7 +92,7 @@ Libraries injected by VirtualGL into applications that are ran throught it.
 Lib package allow installing 32 and 64 bits libraries at the same time.
 
 %prep
-%setup -qn virtualgl-%{version}
+%setup -qn %{name}-%{version}
 %autopatch -p1
 sed -i -e 's,"glx.h",<GL/glx.h>,' server/*.[hc]*
 sed -i -e 's,"glxext.h",<GL/glxext.h>,' server/*.[hc]*
