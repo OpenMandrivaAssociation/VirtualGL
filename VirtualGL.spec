@@ -14,7 +14,7 @@ Version:	3.1.1
 Release:	1
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
-URL:		http://www.virtualgl.org
+URL:		https://www.virtualgl.org
 Source0:	https://github.com/VirtualGL/virtualgl/releases/download/%{version}/VirtualGL-%{version}.tar.gz
 # Use system glx.h
 #Patch0:         faedcc1e36b4ed89a325e01822447900840a0b77.patch
