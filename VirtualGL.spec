@@ -11,7 +11,7 @@
 Name:		VirtualGL
 Summary:	A toolkit for displaying OpenGL applications to thin clients
 Version:	3.1.1
-Release:	1
+Release:	2
 Group:		Networking/Other
 License:	wxWindows Library License v3.1
 URL:		https://www.virtualgl.org
