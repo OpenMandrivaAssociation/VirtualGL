@@ -30,6 +30,7 @@ BuildRequires:	jpeg-static-devel
 BuildRequires:	opencl-devel
 BuildRequires:	opencl-headers
 BuildRequires:	pkgconfig(cairo)
+BuildRequires:	pkgconfig(pangocairo)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xext)
